@@ -27,6 +27,12 @@ A Python-based learning repository focused on understanding and applying Object-
 
 The project is developed incrementally through daily learning tasks. Each stage introduces new requirements, implementation challenges, tests, and opportunities for refactoring.
 
+## Learning Journal
+
+The [Learning Journal](docs/learning_journal.md) documents daily learning objectives, implementation examples, challenges, and lessons learned.
+
+- **Day 1: Introduction to Object-Oriented Programming** — Classes and independent objects, instance attributes, initialization with `__init__()` and `self`, instance methods, object state versus return values, and calculating actual health lost when taking damage.
+
 ## Disclaimer
 
 This is an unofficial educational project inspired by League of Legends. It is not affiliated with or endorsed by Riot Games.
