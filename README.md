@@ -21,7 +21,7 @@ A Python-based learning repository focused on understanding and applying Object-
 - `arena/` – Core application logic
 - `tests/` – Automated tests
 - `docs/` – Learning journal and architectural decisions
-- `main.py` – Application entry point
+- `main.py` – Application entry point 
 
 ## Development Approach
 
