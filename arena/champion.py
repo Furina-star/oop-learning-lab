@@ -38,7 +38,10 @@ ahri = Champion("Ahri")
 garen = Champion("Garen")
 
 ahri_took_damage = ahri.take_damage(1500)
-garen_took_damage = garen.take_damage(600)
+assert ahri.health == 0
+
+garen_took_damage = garen.take_damage(300)
+assert garen.health == 700
 
 print("Champion 1:", ahri.name)
 print(f"Took {ahri_took_damage} damage")
