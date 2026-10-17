@@ -1,18 +1,25 @@
 class Champion:
+
+    # The initializer function
     def __init__(self, name, max_health=1000, health=1000, ability_power=200):
         self.name = name
         self.max_health = max_health
         self._health = health
         self.ability_power = ability_power
 
+    # Set function health as readable property attribute
     @property
     def health(self):
         return self._health
 
+    # Take damage function where it calculates and check the damage dealt
     def take_damage(self, amount):
-        old_health = self._health
+        if amount < 0:
+            raise ValueError("Negative damage is not allowed here.")
 
+        old_health = self._health
         self._health -= amount
+
         if self._health < 0:
             self._health = 0
 
