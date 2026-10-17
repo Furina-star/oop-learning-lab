@@ -1,74 +1,20 @@
-# Day 1: Introduction to Object-Oriented Programming
+﻿# Day 1: Introduction to Object-Oriented Programming
 
 **Project:** OOP Learning Lab — League of Legends-Inspired Champion Arena  
 **Language:** Python  
-**Focus:** Classes, objects, instance attributes, constructors, instance methods, object state, and return values
+**Focus:** Classes, objects, attributes, methods, and return values
 
-## 1. Learning Objectives
+## 1. What I Learned
 
-By the end of Day 1, I aimed to:
+- A **class** is a blueprint. `Champion` describes what a champion has and can do.
+- An **object** is one instance of a class, such as Ahri or Garen.
+- **Attributes** store data, such as a champion's name and health.
+- **Methods** are functions in a class, such as `take_damage()`.
+- Each champion can have its own attribute values. Damaging Ahri does not change Garen's health.
 
-- Understand the difference between a class and an object.
-- Create multiple independent objects from one class.
-- Initialize objects using `__init__()` and `self`.
-- Understand default parameter values.
-- Add an instance method that modifies an object's state.
-- Distinguish between updating an attribute and returning a value.
-- Prevent a champion's health from becoming negative after taking nonnegative damage.
-- Calculate the actual health lost rather than merely reporting incoming damage.
+## 2. Setting Up a Champion
 
-## 2. Classes and Objects
-
-### Class
-
-A class is a blueprint for creating objects. It defines the attributes (data) and methods (behavior) that objects created from the class can use.
-
-### Object
-
-An object is an instance created from a class. Each object can maintain its own attribute values while using the structure and behavior defined by its class.
-
-### Example
-
-In this project, `Champion` is the class. It defines attributes such as `name`, `max_health`, `health`, and `ability_power`, along with a `take_damage()` method.
-
-The variables `ahri` and `garen` refer to two different instances of `Champion`:
-
-```python
-ahri = Champion("Ahri")
-garen = Champion("Garen")
-```
-
-Although both objects come from the same class, changing Ahri's instance attributes does not automatically change Garen's.
-
-## 3. Class Attributes vs. Instance Attributes
-
-In my first attempt, I wrote attributes directly inside the class body:
-
-```python
-class Champion:
-    name = "Unknown"
-    health = 1000
-```
-
-These are **class attributes**. They belong to the class and can be accessed through `Champion.name` or `Champion.health`. If an instance does not have its own attribute with the same name, Python can look up the value on the class.
-
-I later learned to create separate objects and assign values to each object:
-
-```python
-ahri = Champion()
-garen = Champion()
-
-ahri.name = "Ahri"
-garen.name = "Garen"
-```
-
-These assignments create **instance attributes** on the respective objects, allowing the champion names to be stored independently. Modifying `Champion.name` is different from modifying `ahri.name`.
-
-## 4. Initializing Objects with `__init__()`
-
-The `__init__()` method initializes a newly created instance. It makes it possible to provide a champion's information at the time the object is created rather than setting each attribute afterward.
-
-This is the initializer from my Day 1 implementation:
+`__init__()` sets the starting attributes when I create an object. `self` refers to that particular object.
 
 ```python
 class Champion:
@@ -79,86 +25,25 @@ class Champion:
         self.ability_power = ability_power
 ```
 
-- `self` refers to the particular instance being initialized.
-- `name` is a parameter that receives an argument, such as `"Ahri"`.
-- `self.name = name` stores that argument as an attribute of the instance.
-- `max_health=1000`, `health=1000`, and `ability_power=200` are **default parameter values**. They are used when no replacement argument is provided.
+In `self.name = name`, `name` is the value passed in, and `self.name` stores it on the object.
 
-For example:
+Parameters with defaults are optional:
 
 ```python
 ahri = Champion("Ahri")
 garen = Champion("Garen", ability_power=100)
 ```
 
-Ahri receives the default ability power of `200`, while Garen receives `100`. Their attributes are separate because each object is initialized independently.
+Ahri starts with `200` ability power. Garen starts with `100`.
 
-## 5. Instance Methods and Object State
+I also learned the difference between attribute types:
 
-An **instance method** describes behavior that an object can perform. The method receives `self`, allowing it to access and modify the specific object on which it was called.
+- **Class attributes** are defined directly in the class body and are available through the class.
+- **Instance attributes**, such as `self.health`, store values on each object.
 
-For example:
+## 3. Taking Damage
 
-```python
-ahri.take_damage(200)
-```
-
-This operates on Ahri's health, not Garen's.
-
-The initial damage logic helped me understand the difference between computing a result and updating an attribute:
-
-```python
-return self.health - amount
-```
-
-This calculates and returns a number but does **not** change `self.health`.
-
-In contrast:
-
-```python
-self.health -= amount
-```
-
-This updates the object's attribute. It is equivalent, for numeric health values, to `self.health = self.health - amount`.
-
-## 6. Updating State vs. Returning a Value
-
-Modifying an object's state and returning a value are separate operations.
-
-For a method that updates health but has no explicit `return`, Python returns `None`:
-
-```python
-def take_damage(self, amount):
-    self.health -= amount
-```
-
-A method can also return a specific value:
-
-- `return amount` returns the incoming damage argument.
-- `return self.health` returns the remaining health.
-- `return old_health - self.health` returns the actual health lost.
-
-A return statement is not required merely to save changes to an instance attribute. The appropriate return value depends on the intended behavior of the method.
-
-## 7. Preventing Negative Health
-
-The original damage method could produce negative health if incoming damage exceeded the champion's remaining HP. I added a conditional check after subtraction:
-
-```python
-self.health -= amount
-if self.health < 0:
-    self.health = 0
-```
-
-For example, a champion with `1000` HP who receives `1500` damage should finish with `0` HP, not `-500`.
-
-This protection works for **nonnegative incoming damage** under the current exercise assumptions. Input validation has not been implemented yet.
-
-## 8. Calculating Actual Health Lost
-
-Incoming damage and actual HP lost can differ. If a champion has `500` HP and receives `800` damage, the actual health lost is only `500`.
-
-To calculate this, I saved the original health before changing it, then compared the old and new values:
+This method goes inside the `Champion` class:
 
 ```python
 def take_damage(self, amount):
@@ -171,74 +56,47 @@ def take_damage(self, amount):
     return old_health - self.health
 ```
 
-The method now updates the champion's health **and** returns the amount of health actually lost.
+It saves the old health, subtracts damage, keeps health at zero or above, and returns the actual health lost.
 
-### Examples
+For example, if a champion has `500` HP and takes `800` damage, they lose only `500` HP and finish with `0`.
 
-| Starting HP | Incoming damage | Remaining HP | Actual HP lost (return value) |
-| ---: | ---: | ---: | ---: |
-| 1000 | 200 | 800 | 200 |
-| 1000 | 1000 | 0 | 1000 |
-| 1000 | 1500 | 0 | 1000 |
-| 1000 | 0 | 1000 | 0 |
-| 500 | 800 | 0 | 500 |
+### Updating Health vs. Returning a Value
 
-## 9. Day 1 Implementation and Output
+- `self.health -= amount` **changes** the object's stored health.
+- `return self.health - amount` **returns a calculation** without changing stored health.
+- A method can change an attribute without a `return` statement. In that case, it returns `None`.
 
-In my final Day 1 script, I created Ahri and Garen as independent champion objects and applied damage to each:
+## 4. Trying It Out
 
 ```python
 ahri = Champion("Ahri")
 garen = Champion("Garen")
 
-ahri_took_damage = ahri.take_damage(1500)
-garen_took_damage = garen.take_damage(600)
+ahri_damage = ahri.take_damage(1500)
+garen_damage = garen.take_damage(600)
 
-print("Champion 1:", ahri.name)
-print(f"Took {ahri_took_damage} damage")
-print(f"Current Health: {ahri.health}\n")
-
-print("Champion 2:", garen.name)
-print(f"Took {garen_took_damage} damage")
-print(f"Current Health: {garen.health}")
+print(f"{ahri.name}: lost {ahri_damage} HP, {ahri.health} HP left")
+print(f"{garen.name}: lost {garen_damage} HP, {garen.health} HP left")
 ```
 
-**Expected output from the final implementation:**
+Output:
 
 ```text
-Champion 1: Ahri
-Took 1000 damage
-Current Health: 0
-
-Champion 2: Garen
-Took 600 damage
-Current Health: 400
+Ahri: lost 1000 HP, 0 HP left
+Garen: lost 600 HP, 400 HP left
 ```
 
-This demonstrates that each champion stores its own health and that `take_damage()` returns the actual HP lost.
+## 5. Mistakes and Lessons
 
-## 10. Challenges and Lessons Learned
+- I first renamed one object instead of creating two. I needed separate objects for Ahri and Garen.
+- I learned to use instance attributes for each champion's own data.
+- I first returned a subtraction without saving the new health. Updating an attribute and returning a value are separate actions.
+- I fixed negative health and changed the return value to report actual HP lost.
 
-- **One object vs. two objects:** I initially renamed the same object from Ahri to Garen. I corrected this by creating two independent instances.
-- **Class vs. instance attributes:** I learned that assigning `Champion.name` changes a class attribute, while assigning `ahri.name` changes that instance's attribute.
-- **Understanding `self`:** I learned that `self.name` belongs to an object, while `name` is a parameter passed to the initializer.
-- **Calculation vs. assignment:** Simply subtracting a value in a return expression does not save the result to `self.health`. Augmented assignment (`-=`) changes the attribute.
-- **Return values:** I initially confused the damage argument, updated health, and returned result. I learned that a method can update object state regardless of whether it returns a value.
-- **Damage exceeding health:** I fixed negative remaining HP and later adjusted the return value to report the actual health lost.
+## 6. What Comes Next
 
-## 11. Current Limitations and Future Improvements
+The code currently assumes damage is nonnegative. Negative damage can increase health, and starting health is not checked against `max_health`.
 
-These features were **not implemented in Day 1**:
+Future topics include input validation, controlled access to health, healing, attacks, combat turns, and automated tests.
 
-- Validation against negative damage, which currently can increase health.
-- Validation of initial statistics, including keeping initial health within `0` and `max_health`.
-- Protection against arbitrary external modification of health (encapsulation with controlled access).
-- Healing, attacks, abilities, and combat turns.
-- Automated tests with `pytest`.
-
-These are possible topics for later stages, not requirements completed today.
-
-## 12. Day 1 Summary
-
-Day 1 established the foundation for the Champion Arena project. I practiced creating classes and independent objects, initializing instance attributes, implementing methods, modifying object state, and controlling damage calculations. The most important lesson was understanding **the difference between an object's stored state and a method's return value**.
-
+**Main takeaway:** An object's attributes store its state. A method can change that state and return a result.
