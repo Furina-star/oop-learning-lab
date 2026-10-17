@@ -2,6 +2,15 @@ class Champion:
 
     # The initializer function
     def __init__(self, name, max_health=1000, health=1000, ability_power=200):
+        if health < 0 or max_health < 0:
+            raise ValueError("Negative health is not allowed here.")
+
+        if health > max_health:
+            raise ValueError("Cannot exceed the maximum health")
+
+        if max_health == 0:
+            raise ValueError("Health or Max health cannot be zero")
+
         self.name = name
         self.max_health = max_health
         self._health = health
